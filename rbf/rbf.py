@@ -1,5 +1,5 @@
 import numpy as np
-
+import scipy.spatial.distance as scidist
 
 class RBF(object):
     def __init__(self, centers):
@@ -25,6 +25,6 @@ class Gaussian(RBF):
         self.gamma = gamma
 
     def kernel(self,x, y):
-        diff = x-y # A numpy array of distances. Only works if they're the same size...
-        return np.exp(-1.0*self.gamma*np.dot(diff.T, diff)) # Redefine gamma to negative gamma?
+        diffs = scidist.cdist(x,y,metric='sqeuclidean') # A numpy array of distances. Only works if they're the same size...
+        return np.exp(-1.0*self.gamma*diffs) # Redefine gamma to negative gamma?
 
