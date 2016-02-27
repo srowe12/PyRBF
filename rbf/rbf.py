@@ -9,6 +9,7 @@ class RBF(object):
         pass
 
     def kernel(self, x, y):
+        # NOTE: x and y both must be 2d arrays. Maybe [x] is necessary if shape too small.
         dist = scidist.cdist(x,y,metric="sqeuclidean")
         return self.KernelRadial(dist)
 
@@ -20,12 +21,11 @@ class RBF(object):
         self.coefs = sl.solve(kernel_matrix, Y, sym_pos=True)
 
     def Evaluate(self, x):
-        return np.dot(self.coefs, self.kernel(x, self.centers))
+        return np.dot(self.coefs, self.kernel(x, self.centers)[0,:])
 
     def EvaluateCentersKernel(self):
         diffs = scidist.pdist(self.centers,metric='sqeuclidean')
-        print("The shape of centers is", np.shape(self.centers))
-        print("The shape of diffs is", np.shape(diffs))
+
         # TODO: Maybe move the squareform into the KernelRadial to save time.
         return self.KernelRadial(scidist.squareform(diffs)) # Convert distance list to matrix.
 

@@ -21,9 +21,6 @@ def test_GaussianKernelEvaluate():
     xvec = np.array([[0,0],[1.0,1.0]], dtype=float)
     yvec = np.array([[1.0,1.0],[2.0,2.0],[3.0,3.0]])
     dists = gaussian.kernel(xvec,yvec)
-    print("The distance matrix is", dists)
-    print("The shape is", np.shape(dists))
-    print("Dists", dists[0][0])
 
     tol = 1e-15
     assert (dists[0][0] - np.exp(-.5) ) < tol
@@ -38,8 +35,7 @@ def test_GaussianMatrix():
     gaussian = rbf.Gaussian(centers,gamma)
     data_values = np.array([1.0,2.0,3.0,4.0], dtype=float)
     gaussian_matrix = gaussian.EvaluateCentersKernel()
-    print("The Gaussian Matrix is: ", gaussian_matrix)
-    print("The shape is: ", np.shape(gaussian_matrix))
+    assert np.shape(gaussian_matrix) == (4,4)
     expected_gaussian_matrix = np.array([[1.0, np.exp(-.25), np.exp(-.5), np.exp(-.25)],
                                          [np.exp(-.25), 1.0, np.exp(-.25), np.exp(-.5)],
                                         [np.exp(-.5), np.exp(-.25), 1.0, np.exp(-.25)],
@@ -52,7 +48,14 @@ def test_GaussianFit():
     gaussian = rbf.Gaussian(centers,gamma)
     data_values = np.array([1.0,2.0,3.0,4.0], dtype=float)
     gaussian.fit(data_values)
-    assert 1.0 == gaussian.Evaluate(centers[0])
+
+    tol = 1e-14
+    assert (1.0 - gaussian.Evaluate([centers[0]]) ) < tol
+    assert (2.0 - gaussian.Evaluate([centers[1]]) ) < tol
+    assert (3.0 - gaussian.Evaluate([centers[2]]) ) < tol
+    assert (4.0 - gaussian.Evaluate([centers[3]]) ) < tol
+
+
 
 
 
