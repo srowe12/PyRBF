@@ -17,14 +17,17 @@ class RBF(object):
 
     def fit(self, Y):
         kernel_matrix = self.EvaluateCentersKernel()
-        self.coefs = sl.solve(Y)
+        self.coefs = sl.solve(kernel_matrix, Y, sym_pos=True)
 
     def Evaluate(self, x):
         return np.dot(self.coefs, self.kernel(x, self.centers))
 
     def EvaluateCentersKernel(self):
         diffs = scidist.pdist(self.centers,metric='sqeuclidean')
-        return self.kernel(diffs)
+        print("The shape of centers is", np.shape(self.centers))
+        print("The shape of diffs is", np.shape(diffs))
+        # TODO: Maybe move the squareform into the KernelRadial to save time.
+        return self.KernelRadial(scidist.squareform(diffs)) # Convert distance list to matrix.
 
 class Gaussian(RBF):
     def __init__(self,centers, gamma):
