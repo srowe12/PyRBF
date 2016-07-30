@@ -11,20 +11,21 @@ class Polynomial(object):
         There are (n+d) choose n coefficients where n is the degree of the polynomial and d is the dimension
         :return: Return the number of coefficients corresponding to the polynomial given the degree and dimension
         """
-
-        # TODO: Seems risky, is there a better way to handle this?
-        return round(nchoosek(self.degree + self.dimension, self.degree))
+        return nchoosek(self.degree + self.dimension, self.degree, exact=True)
+    
+    def Evaluate(self, x):
+        pass
 
 class CPDRBF(object):
     """
     A conditionally positive definite (CPD) RBF. A CPD RBF generates a non-singular fit matrix only in the case
     that certain additional polynomial constraints and dimensional constraints are verified.
     """
-    def __init__(self, centers, poly_degree):
+    def __init__(self, centers, poly_degree, dimension = 2):
         self.coefs = np.zeros((len(centers), 1), dtype=float)
         self.centers = centers  # An np.array of shape (N,d) where N is the number of data points and d is the dimension.
-        self.poly_degree = poly_degree
-        self.polynomial = Polynomial(poly_degree)
+
+        self.polynomial = Polynomial(poly_degree, dimension)
         pass
 
     def kernel(self, x, y):
@@ -52,7 +53,7 @@ class CPDRBF(object):
         self.coefs = sl.solve(kernel_matrix, Y, sym_pos=True)
 
     def Evaluate(self, x):
-        return np.dot(self.coefs, self.kernel(x, self.centers)[0,:])
+        return np.dot(self.coefs, self.kernel(x, self.centers)[0,:]) + self.polynomial.Evaluate(x)
 
     def EvaluateCentersKernel(self):
         diffs = scidist.pdist(self.centers,metric='sqeuclidean')
