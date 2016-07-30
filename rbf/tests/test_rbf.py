@@ -64,20 +64,30 @@ def test_GaussianFit():
 def test_MultiquadricEvaluate():
     gamma = .25
     centers = np.array([[0, 0], [0, 1], [1, 1], [1, 0]], dtype=float)
-    multiquadric = rbf.Multiquadric(centers,gamma)
+    inverse_multiquadric = rbf.InverseMultiquadric(centers,gamma)
     xvec = np.array([[0, 0], [1.0, 1.0]], dtype=float)
     yvec = np.array([[1.0, 1.0], [2.0, 2.0], [3.0, 3.0]])
-    dists = multiquadric.kernel(xvec, yvec)
+    dists = inverse_multiquadric.kernel(xvec, yvec)
 
-    expected_distance = np.array([[   1.224744871391589,   1.732050807568877,   2.345207879911714],[
-   1.000000000000000,   1.224744871391589,   1.732050807568877]])
+    expected_distance = np.array([[    0.816496580927726 ,  0.577350269189626,   0.426401432711221],[
+   1.000000000000000,   0.816496580927726,   0.577350269189626]])
 
     print("The dists computed is", dists)
     error = np.linalg.norm(expected_distance - dists)
     print("The error is", error)
     assert np.linalg.norm(dists-expected_distance) < 1e-8
 
+def test_MultiquadricFit():
+    gamma = .25
+    centers = np.array([[0,0],[0,1],[1,1],[1,0]], dtype=float)
+    inverse_multiquadric = rbf.InverseMultiquadric(centers,gamma)
+    data_values = np.array([1.0,2.0,3.0,4.0], dtype=float)
+    inverse_multiquadric.fit(data_values)
 
-
+    tol = 1e-14
+    assert (1.0 - inverse_multiquadric.Evaluate([centers[0]]) ) < tol
+    assert (2.0 - inverse_multiquadric.Evaluate([centers[1]]) ) < tol
+    assert (3.0 - inverse_multiquadric.Evaluate([centers[2]]) ) < tol
+    assert (4.0 - inverse_multiquadric.Evaluate([centers[3]]) ) < tol
 
 

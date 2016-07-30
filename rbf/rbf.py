@@ -49,11 +49,12 @@ class Gaussian(RBF):
     def KernelRadial(self,r):
         return np.exp(-1.0*self.gamma*r)
 
-class Multiquadric(RBF):
+class InverseMultiquadric(RBF):
+    """The inverse multiquadric is a positive definite kernel corresponding to 1/sqrt(1+gamma*x^2)"""
     def __init__(self, centers, gamma):
         RBF.__init__(self,centers)
         self.gamma = gamma
 
     def KernelRadial(self, r):
-        return np.sqrt(1+self.gamma*r)
+        return np.reciprocal(np.sqrt(1+self.gamma*r))
 
