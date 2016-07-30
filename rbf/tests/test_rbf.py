@@ -1,6 +1,11 @@
 import numpy as np
+import sys
+sys.path.append("..")
 import rbf
 import scipy.spatial.distance as dist
+import os
+
+print("The current directory is ", os.curdir)
 def test_GaussianKernel():
     gamma = 1.0
     centers = np.array([[1.0,2.0,3.0,4.0]])
@@ -55,6 +60,22 @@ def test_GaussianFit():
     assert (3.0 - gaussian.Evaluate([centers[2]]) ) < tol
     assert (4.0 - gaussian.Evaluate([centers[3]]) ) < tol
 
+
+def test_MultiquadricEvaluate():
+    gamma = .25
+    centers = np.array([[0, 0], [0, 1], [1, 1], [1, 0]], dtype=float)
+    multiquadric = rbf.Multiquadric(centers,gamma)
+    xvec = np.array([[0, 0], [1.0, 1.0]], dtype=float)
+    yvec = np.array([[1.0, 1.0], [2.0, 2.0], [3.0, 3.0]])
+    dists = multiquadric.kernel(xvec, yvec)
+
+    expected_distance = np.array([[   1.224744871391589,   1.732050807568877,   2.345207879911714],[
+   1.000000000000000,   1.224744871391589,   1.732050807568877]])
+
+    print("The dists computed is", dists)
+    error = np.linalg.norm(expected_distance - dists)
+    print("The error is", error)
+    assert np.linalg.norm(dists-expected_distance) < 1e-8
 
 
 

@@ -9,14 +9,26 @@ class RBF(object):
         pass
 
     def kernel(self, x, y):
+        """
+        Returns the squared distance between each pair of points in arrays x and y
+        :param x: A vector of input points of dimension N
+        :param y: A vector of input points of dimension N
+        :return: A vector of squared distances between each pair of points from x and y
+        """
         # NOTE: x and y both must be 2d arrays. Maybe [x] is necessary if shape too small.
         dist = scidist.cdist(x,y,metric="sqeuclidean")
         return self.KernelRadial(dist)
 
     def KernelRadial(self,r):
+        """Overloaded in the derived class"""
         pass
 
     def fit(self, Y):
+        """
+        Generates the RBF coefficients to fit a set of given data values Y for centers self.centers
+        :param Y: A set of dependent data values corresponding to self.centers
+        :return: Void, sets the self.coefs values
+        """
         kernel_matrix = self.EvaluateCentersKernel()
         self.coefs = sl.solve(kernel_matrix, Y, sym_pos=True)
 
@@ -34,12 +46,14 @@ class Gaussian(RBF):
         RBF.__init__(self,centers)
         self.gamma = gamma
 
-    # def kernel(self,x, y):
-    #     diffs = scidist.cdist(x,y,metric='sqeuclidean') # A numpy array of distances. Only works if they're the same size...
-    #     return np.exp(-1.0*self.gamma*diffs) # Redefine gamma to negative gamma?
-
     def KernelRadial(self,r):
         return np.exp(-1.0*self.gamma*r)
 
+class Multiquadric(RBF):
+    def __init__(self, centers, gamma):
+        RBF.__init__(self,centers)
+        self.gamma = gamma
 
+    def KernelRadial(self, r):
+        return np.sqrt(1+self.gamma*r)
 
