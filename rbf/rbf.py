@@ -42,6 +42,10 @@ class RBF(object):
         return self.KernelRadial(scidist.squareform(diffs)) # Convert distance list to matrix.
 
 class Gaussian(RBF):
+    """
+    The Gaussian RBF is a positive definite kernel corresponding to exp(-gamma*r^2). The Gaussian kernel provides
+    spectral  accuracy.
+    """
     def __init__(self,centers, gamma):
         RBF.__init__(self,centers)
         self.gamma = gamma
@@ -50,7 +54,10 @@ class Gaussian(RBF):
         return np.exp(-1.0*self.gamma*r)
 
 class InverseMultiquadric(RBF):
-    """The inverse multiquadric is a positive definite kernel corresponding to 1/sqrt(1+gamma*x^2)"""
+    """
+    The inverse multiquadric is a positive definite kernel corresponding to 1/sqrt(1+gamma*r^2). The inverse
+    multiquadric kernel provides spectral accuracy
+    """
     def __init__(self, centers, gamma):
         RBF.__init__(self,centers)
         self.gamma = gamma
@@ -58,3 +65,14 @@ class InverseMultiquadric(RBF):
     def KernelRadial(self, r):
         return np.reciprocal(np.sqrt(1+self.gamma*r))
 
+class InverseQuadratic(RBF):
+    """
+    The inverse quadratic is a positive definite kernel corresponding to 1/(1+gamma*r^2). The inverse
+    quadratic kernel provides spectral accuracy
+    """
+    def __init__(self, centers, gamma):
+        RBF.__init__(self,centers)
+        self.gamma = gamma
+
+    def KernelRadial(self, r):
+        return np.reciprocal(1+self.gamma*r)
