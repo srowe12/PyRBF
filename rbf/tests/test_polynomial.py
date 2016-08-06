@@ -32,9 +32,19 @@ def test_PolynomialEvaluate():
 
     p = poly.Polynomial(degree,dimension)
 
-    assert 10 == p.Evaluate(coefficients, 1.0)
+    assert 10 == p.Evaluate(coefficients, [1.0])
 
+    assert 4 == p.Evaluate(coefficients, [0.0])
 
+def test_PolynomialEvaluateDim2Deg3():
+    degree = 3
+    dimension = 2
+
+    coefficients = [1,2,3,4,5,6,7,8,9,10]
+
+    p = poly.Polynomial(degree, dimension)
+
+    assert 366 == p.Evaluate(coefficients, [2.0,3.0])
 
 
 
@@ -67,3 +77,16 @@ def test_Polynomial4DimensionsDegree3():
 
     solution = poly.GetMonomialsOfFixedDegree(dimension=4,degree=3)
     assert solution == expected_solution
+
+def test_MonomialBasisDegree2Dimension2():
+    expected_monomial_basis = [[2,0],
+                               [1,1],
+                               [0,2],
+                               [1,0],
+                               [0,1],
+                               [0,0]]
+    dimension = 2
+    degree = 2
+
+    monomial_basis = poly.GetMonomialBasis(dimension, degree)
+    assert monomial_basis == expected_monomial_basis
