@@ -1,24 +1,5 @@
 import rbf
-from scipy.misc import comb as nchoosek
-class Polynomial(object):
-    def __init__(self, polynomial_degree, dimension=2):
-        self.degree = polynomial_degree
-        self.dimension = dimension
-        self.num_coefficients = self.NumCoefficients()
 
-    def NumCoefficients(self):
-        """
-        There are (n+d) choose n coefficients where n is the degree of the polynomial and d is the dimension
-        :return: Return the number of coefficients corresponding to the polynomial given the degree and dimension
-        """
-        return nchoosek(self.degree + self.dimension, self.degree, exact=True)
-
-    def Evaluate(self, coefficients, x):
-        # TODO: Use Horner's Method to evaluate the polynomial
-        # See: https://en.wikipedia.org/wiki/Horner%27s_method
-        # Also,
-
-        pass
 
 class CPDRBF(object):
     """
