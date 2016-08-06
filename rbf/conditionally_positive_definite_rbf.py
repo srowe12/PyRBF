@@ -12,8 +12,12 @@ class Polynomial(object):
         :return: Return the number of coefficients corresponding to the polynomial given the degree and dimension
         """
         return nchoosek(self.degree + self.dimension, self.degree, exact=True)
-    
-    def Evaluate(self, x):
+
+    def Evaluate(self, coefficients, x):
+        # TODO: Use Horner's Method to evaluate the polynomial
+        # See: https://en.wikipedia.org/wiki/Horner%27s_method
+        # Also,
+
         pass
 
 class CPDRBF(object):
