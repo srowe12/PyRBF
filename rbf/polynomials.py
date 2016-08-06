@@ -6,6 +6,7 @@ class Polynomial(object):
         self.degree = polynomial_degree
         self.dimension = dimension
         self.num_coefficients = self.NumCoefficients()
+        self.basis = GetMonomialBasis(dimension, polynomial_degree)
 
     def NumCoefficients(self):
         """
@@ -18,8 +19,29 @@ class Polynomial(object):
         # TODO: Use Horner's Method to evaluate the polynomial
         # See: https://en.wikipedia.org/wiki/Horner%27s_method
         # Also,
+        result = 0
+        for monomial_index, monomial in enumerate(self.basis):
+            val = 1
+            for index,power in enumerate(monomial):
+                val *= x[index]**power
+            result += coefficients[monomial_index]*val
+        return result
 
-        pass
+def GetMonomialBasis(dimension, degree):
+    """
+    Computes the monomial basis for space of 'dimension' dim polynomials of up to degree 'degree'.
+    :param dimension: The number of independent variables for the polynomials to be comprised of. For example, dimension
+    3 has x,y,z as independent variables.
+    :param degree: The maximum of the sum of the powers of any given monomial in the space of polynomials
+    :return: A list of all possible powers of polynomials in the given space
+    """
+    monomial_basis = []
+    for deg in range(degree,0,-1):
+        monomials_of_current_degree = GetMonomialsOfFixedDegree(dimension,deg)
+        monomial_basis += monomials_of_current_degree
+    # Now, let's append the "constant" monomial of zero powers
+    monomial_basis += [dimension*[0]]
+    return monomial_basis
 
 def GetMonomialsOfFixedDegree(dimension,degree):
     """
