@@ -90,3 +90,20 @@ def test_MonomialBasisDegree2Dimension2():
 
     monomial_basis = poly.GetMonomialBasis(dimension, degree)
     assert monomial_basis == expected_monomial_basis
+
+
+def test_BuildPolynomialMatrix():
+    degree = 2
+    dimension = 2
+    monomial_basis = poly.GetMonomialBasis(dimension,degree)
+    evaluation_list = np.array([[1,2,3],[4,5,6]])
+    P = poly.BuildPolynomialMatrix(monomial_basis, degree, evaluation_list)
+    num_centers = np.shape(evaluation_list)[1]
+
+    poly_matrix_shape = np.shape(P)
+    assert poly_matrix_shape[0] == num_centers # Should be one row per evaluation point
+    assert poly_matrix_shape[1] == len(monomial_basis)  # Should be one column per basis element
+
+    expected_matrix = np.array([[1,4,9],[4,10,18],[16,25,36],[1,2,3],[4,5,6],[1,1,1]]).transpose()
+
+    assert np.linalg.norm(expected_matrix - P) < 1e-12
