@@ -36,6 +36,13 @@ class RBF(object):
         return np.dot(self.coefs, self.kernel(x, self.centers)[0,:])
 
     def EvaluateCentersKernel(self):
+        """
+        Computes the pairwise distances between the centers used for the interpolation fit. We produce a square
+        matrix from this by computing scidist.squareform(diffs) to convert it into a symmetric matrix
+
+        :return: A symmetric matrix of pairwise differences evaluated with the function. Mathematically, given
+         the kenrel K, computes K(x,y) for each x,y in the set of centers X.
+        """
         diffs = scidist.pdist(self.centers,metric='sqeuclidean')
 
         # TODO: Maybe move the squareform into the KernelRadial to save time.

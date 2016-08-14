@@ -27,15 +27,15 @@ class Polynomial(object):
             result += coefficients[monomial_index]*val
         return result
 
-def BuildPolynomialMatrix(monomial_basis, degree, evaluation_list):
+def BuildPolynomialMatrix(monomial_basis, evaluation_list):
     """
     Produces a Vandermonde like matrix where each column corresponds to a monomial and every row corresponds to
     the evaluation of that monomial on a point in the evaluation_list. That is, P(row,col) is the evaluation of
     the monomial_basis[row].Evaluate(evaluation_list[col])
     :param monomial_basis: A list of lists containing the powers of corresponding monomials. See GetMonomialBasis
-    :param evaluation_list: A numpy matrix of m rows, where each row represents a point to be evaluated, and each column
-    represents the value of the point in that corresponding dimension. For example, [[3,1,2],[2,1,0]] represents two points
-    where the first point is [3,1,2] which has x = 3, y = 1, z = 2.
+    :param evaluation_list: A numpy matrix of m columns, where each column represents a point to be evaluated, and each row
+    represents the value of the point in that corresponding dimension. For example, [[3,1,2],[2,1,0]] represents three points
+    where the first point has x value 3 and y value 1.
     :return: A Vandermonde like matrix evaluating the monomials at every center given.
     """
     shape = np.shape(evaluation_list)

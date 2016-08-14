@@ -97,7 +97,7 @@ def test_BuildPolynomialMatrix():
     dimension = 2
     monomial_basis = poly.GetMonomialBasis(dimension,degree)
     evaluation_list = np.array([[1,2,3],[4,5,6]])
-    P = poly.BuildPolynomialMatrix(monomial_basis, degree, evaluation_list)
+    P = poly.BuildPolynomialMatrix(monomial_basis, evaluation_list)
     num_centers = np.shape(evaluation_list)[1]
 
     poly_matrix_shape = np.shape(P)
