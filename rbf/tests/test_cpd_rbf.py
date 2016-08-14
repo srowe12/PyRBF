@@ -1,8 +1,5 @@
 import numpy as np
-import sys
-
-sys.path.append("..")
-import conditionally_positive_definite_rbf as cpdrbf
+import rbf.conditionally_positive_definite_rbf as cpdrbf
 
 
 def test_ThinPlateSplineKernelRadial():
@@ -38,9 +35,6 @@ def test_ThinPlatSplineFit():
     expected_data_values[-3] = 2
     expected_data_values[-2] = -4
     expected_data_values[-1] = 3
-    #print("The expected data values are", expected_data_values)
-    print("The computed fit coefficients are", tps.coefs)
     coefficient_difference = tps.coefs - expected_data_values
     coefficient_fit_error = np.linalg.norm(coefficient_difference)
-    print("The coef error is", coefficient_difference)
     assert coefficient_fit_error < 1e-12

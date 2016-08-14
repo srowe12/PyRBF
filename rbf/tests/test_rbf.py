@@ -1,7 +1,7 @@
 import numpy as np
 import sys
-sys.path.append("..")
-import rbf
+#sys.path.append("..")
+import rbf.rbf as rbf
 import scipy.spatial.distance as dist
 import os
 
