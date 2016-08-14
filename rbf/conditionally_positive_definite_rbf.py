@@ -1,6 +1,6 @@
-import rbf
+import rbf.rbf
 
-import polynomials as poly
+import rbf.polynomials as poly
 import numpy as np
 import scipy.linalg as sl
 import scipy.spatial.distance as scidist
