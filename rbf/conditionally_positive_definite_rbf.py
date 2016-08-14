@@ -1,11 +1,9 @@
 from __future__ import absolute_import
-import rbf.rbf
 
 import rbf.polynomials as poly
 import numpy as np
 import scipy.linalg as sl
 import scipy.spatial.distance as scidist
-import scipy.special as sspec
 
 class CPDRBF(object):
     """
@@ -13,7 +11,10 @@ class CPDRBF(object):
     that certain additional polynomial constraints and dimensional constraints are verified.
     """
     def __init__(self, centers, poly_degree, dimension = 2):
+        # TODO: The coefficient array is larger than the length of the centers
         self.coefs = np.zeros((len(centers), 1), dtype=float)
+        self.num_rbf_coefs = len(centers)
+        # TODO: Establish num poly coefs here
         self.centers = centers  # An np.array of shape (N,d) where N is the number of data points and d is the dimension.
         self.poly_degree = poly_degree
         self.dimension = dimension
@@ -36,7 +37,6 @@ class CPDRBF(object):
         pass
 
     def fit(self, Y):
-        print("The shape of Y is", np.shape(Y))
         """
         Generates the RBF coefficients to fit a set of given data values Y for centers self.centers
         :param Y: A set of dependent data values corresponding to self.centers
@@ -49,6 +49,7 @@ class CPDRBF(object):
         poly_shape = np.shape(poly_matrix)
         # Get the number of columns, as we need to make an np.zeros((num_cols,num_cols))
         num_cols = poly_shape[1]
+        num_rbf_coefs = len(self.centers)
         zero_mat = np.zeros((num_cols,num_cols))
         upper_matrix = np.hstack((kernel_matrix, poly_matrix))
         lower_matrix = np.hstack((poly_matrix.transpose(),zero_mat))
@@ -57,7 +58,8 @@ class CPDRBF(object):
         self.coefs = sl.solve(rbf_matrix, Y, sym_pos=False)
 
     def Evaluate(self, x):
-        return np.dot(self.coefs, self.kernel(x, self.centers)[0,:]) + self.polynomial.Evaluate(x)
+        # TODO: Fix the polynomial needing a transpose, that's absurd
+        return np.dot(self.kernel(x, self.centers), self.coefs[0:self.num_rbf_coefs]) + self.polynomial.Evaluate(self.coefs[self.num_rbf_coefs:],x.transpose())
 
     def EvaluateCentersKernel(self):
         """
