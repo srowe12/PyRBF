@@ -69,3 +69,22 @@ def test_ThinPlateSplineFit():
     coefficient_difference = tps.coefs - expected_solution
     coefficient_fit_error = np.linalg.norm(coefficient_difference)
     assert coefficient_fit_error < 1e-12
+
+def test_ThinPlateSplineEvaluate():
+    poly_degree = 1
+    dimension = 2
+    centers = np.array([[1, 2],
+                        [3, 4],
+                        [5, 6],
+                        [1, 1],
+                        [2, 2],
+                        [3, 3],
+                        [4, 4],
+                        [5, 5]])
+    tps = cpdrbf.ThinPlateSpline(centers, poly_degree, dimension)
+    data_values = np.sin(np.pi / 7 * centers[:, 0]) * np.sin(np.pi / 7 * centers[:, 1])
+    tps.fit(data_values)
+    evaluation_points = centers
+    evaluations = tps.Evaluate(evaluation_points)
+
+    assert np.max(np.abs(evaluations-data_values)) < 1e-12
