@@ -1,8 +1,6 @@
-import polynomials as poly
+import rbf.polynomials as poly
 
 import numpy as np
-import sys
-sys.path.append("..")
 
 
 def test_PolynomialNumCoefficients():
