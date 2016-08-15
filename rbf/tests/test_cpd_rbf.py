@@ -92,5 +92,4 @@ def test_ThinPlateSplineEvaluate():
     # Let's choose a subset and verify it works when number of evaluation points is not the same as the number of centers
     evaluation_points = centers[0:4,:]
     evaluations = tps.Evaluate(evaluation_points)
-    assert np.max(np.abs(evaluations - data_values[0:,4])) < 1e-12
-    
+    assert np.max(np.abs(evaluations - data_values[0:4])) < 1e-12
