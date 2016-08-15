@@ -93,3 +93,4 @@ def test_ThinPlateSplineEvaluate():
     evaluation_points = centers[0:4,:]
     evaluations = tps.Evaluate(evaluation_points)
     assert np.max(np.abs(evaluations - data_values[0:4])) < 1e-12
+    
